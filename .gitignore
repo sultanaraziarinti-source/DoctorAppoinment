@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+
+# Expo / build output
+.expo/
+dist/
+web-build/
+android/
+ios/
+*.apk
+*.aab
+
+# Secrets (Supabase URL and key) - copy .env.example to .env and fill it in
+.env
+.env.local
+
+# Phone screenshots taken while testing
+screen_*.png
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+*.log

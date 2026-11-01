@@ -1,0 +1,13 @@
+# Files not uploaded to EAS Build.
+# .env is uploaded on purpose: it holds the EXPO_PUBLIC_SUPABASE_* values built into the app.
+node_modules/
+.expo/
+
+# EAS generates the native project itself (expo prebuild on its servers)
+android/
+ios/
+
+# Local build outputs and screenshots
+*.apk
+*.aab
+/screen_*.png

@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Doctor Appointment ER Sketch</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one wide schema sheet, notes underneath in a two-column grid that stacks on phones */
+:root {
+  --bg: #F4F8F9; --surface: #FFFFFF; --fg: #1E293B; --muted: #5F6F82;
+  --line: #D5E1E5; --accent: #0E747F; --accent-soft: #E3F2F3; --warn: #C2502F;
+  --f-body: "Atkinson Hyperlegible", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0F1A1D; --surface: #16252A; --fg: #E4EEF0; --muted: #93A7AE;
+  --line: #2A3F45; --accent: #4CC3CD; --accent-soft: #1B3A3F; --warn: #F08A6C; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0F1A1D; --surface: #16252A; --fg: #E4EEF0; --muted: #93A7AE;
+  --line: #2A3F45; --accent: #4CC3CD; --accent-soft: #1B3A3F; --warn: #F08A6C; color-scheme: dark }
+
+body { background: var(--bg); color: var(--fg); font: 16px/1.55 var(--f-body); }
+.wrap { max-width: 1280px; margin: 0 auto; padding-block: 36px 56px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 28px; }
+header { display: grid; gap: 6px; }
+.eyebrow { font: 600 12px var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+h1 { margin: 0; font-size: clamp(26px, 4vw, 34px); line-height: 1.15; text-wrap: balance; }
+header p { margin: 0; color: var(--muted); max-width: 65ch; }
+
+figure { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; display: grid; gap: 12px; }
+.scroll { overflow-x: auto; }
+svg { display: block; width: 100%; min-width: 820px; height: auto; color: var(--fg); }
+figcaption { font-size: 14px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 8px 22px; align-items: center; }
+.key { display: inline-flex; align-items: center; gap: 8px; }
+.key svg { min-width: 0; width: 34px; }
+
+.box { fill: var(--surface); stroke: var(--line); stroke-width: 1.5; }
+.head { fill: var(--accent); }
+.ename { fill: var(--surface); font: 600 14px var(--f-mono); letter-spacing: .06em; }
+.sep { stroke: var(--line); stroke-width: 1; }
+.f { fill: var(--fg); font: 400 12.5px var(--f-mono); }
+.f.add { fill: var(--muted); font-style: italic; }
+.t { fill: var(--muted); font: 400 11.5px var(--f-mono); }
+.tag { font: 600 10px var(--f-mono); letter-spacing: .05em; }
+.tag-pk { fill: var(--accent); }
+.tag-fk { fill: var(--warn); }
+.rel { stroke: currentColor; stroke-width: 1.6; fill: none; }
+.ring { fill: var(--surface); stroke: currentColor; stroke-width: 1.6; }
+.rl { fill: var(--fg); font: 700 13px var(--f-body); }
+.rs { fill: var(--muted); font: 400 11.5px var(--f-mono); }
+
+.notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+.notes section { min-width: 0; display: grid; gap: 10px; align-content: start; }
+h2 { margin: 0; font-size: 18px; }
+ul { margin: 0; padding-left: 20px; display: grid; gap: 8px; }
+code { font: 13px var(--f-mono); background: var(--accent-soft); padding: 1px 5px; border-radius: 4px; overflow-wrap: anywhere; }
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="eyebrow">ER diagram · from the notebook sketch</span>
+    <h1>Doctor appointment system</h1>
+    <p>Eight entities: the seven from the hand-drawn sketch plus Device. Patients and doctors are both users, each user can log in on several devices, doctors belong to departments, and patients book appointments with doctors through schedule slots.</p>
+  </header>
+
+  <figure>
+    <div class="scroll">
+      <svg viewBox="0 0 1640 878" role="img" aria-label="ER diagram: a User logs in on many Devices; a Patient has many Phone Numbers and books many Appointments; Patient and Doctor are each a User; a Schedule fills many Appointments; each Appointment is with one Doctor; each Doctor belongs to one Department.">
+<g>
+  <rect class="box" x="40" y="40" width="300" height="115" rx="6"/>
+  <path class="head" d="M40 46 a6 6 0 0 1 6 -6 h288 a6 6 0 0 1 6 6 v30 h-300 z"/>
+  <text class="ename" x="54" y="63">PHONE NUMBER</text>
+  <text class="tag tag-pk" x="54" y="97">PK</text>
+  <text class="f" x="90" y="97">id</text>
+  <text class="t" x="326" y="97" text-anchor="end">int</text>
+  <line class="sep" x1="50" x2="330" y1="104" y2="104"/>
+  <text class="f" x="90" y="120">phone</text>
+  <text class="t" x="326" y="120" text-anchor="end">string</text>
+  <line class="sep" x1="50" x2="330" y1="127" y2="127"/>
+  <text class="tag tag-fk" x="54" y="143">FK</text>
+  <text class="f" x="90" y="143">patientId</text>
+  <text class="t" x="326" y="143" text-anchor="end">→ PATIENT</text>
+</g>
+<g>
+  <rect class="box" x="460" y="40" width="300" height="207" rx="6"/>
+  <path class="head" d="M460 46 a6 6 0 0 1 6 -6 h288 a6 6 0 0 1 6 6 v30 h-300 z"/>
+  <text class="ename" x="474" y="63">PATIENT</text>
+  <text class="tag tag-pk" x="474" y="97">PK</text>
+  <text class="f" x="510" y="97">id</text>
+  <text class="t" x="746" y="97" text-anchor="end">int</text>
+  <line class="sep" x1="470" x2="750" y1="104" y2="104"/>
+  <text class="f" x="510" y="120">name</text>
+  <text class="t" x="746" y="120" text-anchor="end">string</text>
+  <line class="sep" x1="470" x2="750" y1="127" y2="127"/>
+  <text class="f" x="510" y="143">phone</text>
+  <text class="t" x="746" y="143" text-anchor="end">string</text>
+  <line class="sep" x1="470" x2="750" y1="150" y2="150"/>
+  <text class="f" x="510" y="166">password</text>
+  <text class="t" x="746" y="166" text-anchor="end">string</text>
+  <line class="sep" x1="470" x2="750" y1="173" y2="173"/>
+  <text class="f" x="510" y="189">age</text>
+  <text class="t" x="746" y="189" text-anchor="end">int</text>
+  <line class="sep" x1="470" x2="750" y1="196" y2="196"/>
+  <text class="tag tag-fk" x="474" y="212">FK</text>
+  <text class="f" x="510" y="212">doctorId</text>
+  <text class="t" x="746" y="212" text-anchor="end">→ DOCTOR</text>
+  <line class="sep" x1="470" x2="750" y1="219" y2="219"/>
+  <text class="f" x="510" y="235">appointments</text>
+  <text class="t" x="746" y="235" text-anchor="end">list</text>
+</g>
+<g>
+  <rect class="box" x="880" y="40" width="300" height="115" rx="6"/>
+  <path class="head" d="M880 46 a6 6 0 0 1 6 -6 h288 a6 6 0 0 1 6 6 v30 h-300 z"/>
+  <text class="ename" x="894" y="63">USER</text>
+  <text class="tag tag-pk" x="894" y="97">PK</text>
+  <text class="f" x="930" y="97">id</text>
+  <text class="t" x="1166" y="97" text-anchor="end">int</text>
+  <line class="sep" x1="890" x2="1170" y1="104" y2="104"/>
+  <text class="f" x="930" y="120">role</text>
+  <text class="t" x="1166" y="120" text-anchor="end">patient|doctor|registrar</text>
+  <line class="sep" x1="890" x2="1170" y1="127" y2="127"/>
+  <text class="f" x="930" y="143">registered</text>
+  <text class="t" x="1166" y="143" text-anchor="end">bool</text>
+</g>
+<g>
+  <rect class="box" x="1300" y="40" width="300" height="184" rx="6"/>
+  <path class="head" d="M1300 46 a6 6 0 0 1 6 -6 h288 a6 6 0 0 1 6 6 v30 h-300 z"/>
+  <text class="ename" x="1314" y="63">DEVICE</text>
+  <text class="tag tag-pk" x="1314" y="97">PK</text>
+  <text class="f" x="1350" y="97">id</text>
+  <text class="t" x="1586" y="97" text-anchor="end">int</text>
+  <line class="sep" x1="1310" x2="1590" y1="104" y2="104"/>
+  <text class="tag tag-fk" x="1314" y="120">FK</text>
+  <text class="f" x="1350" y="120">userId</text>
+  <text class="t" x="1586" y="120" text-anchor="end">→ USER</text>
+  <line class="sep" x1="1310" x2="1590" y1="127" y2="127"/>
+  <text class="f" x="1350" y="143">deviceName</text>
+  <text class="t" x="1586" y="143" text-anchor="end">string</text>
+  <line class="sep" x1="1310" x2="1590" y1="150" y2="150"/>
+  <text class="f" x="1350" y="166">platform</text>
+  <text class="t" x="1586" y="166" text-anchor="end">android|ios</text>
+  <line class="sep" x1="1310" x2="1590" y1="173" y2="173"/>
+  <text class="f" x="1350" y="189">deviceToken</text>
+  <text class="t" x="1586" y="189" text-anchor="end">string</text>
+  <line class="sep" x1="1310" x2="1590" y1="196" y2="196"/>
+  <text class="f" x="1350" y="212">lastLogin</text>
+  <text class="t" x="1586" y="212" text-anchor="end">datetime</text>
+</g>
+<g>
+  <rect class="box" x="40" y="347" width="300" height="184" rx="6"/>
+  <path class="head" d="M40 353 a6 6 0 0 1 6 -6 h288 a6 6 0 0 1 6 6 v30 h-300 z"/>
+  <text class="ename" x="54" y="370">SCHEDULE</text>
+  <text class="tag tag-pk" x="54" y="404">PK</text>
+  <text class="f add" x="90" y="404">id *</text>
+  <text class="t" x="326" y="404" text-anchor="end">int</text>
+  <line class="sep" x1="50" x2="330" y1="411" y2="411"/>
+  <text class="f" x="90" y="427">date</text>
+  <text class="t" x="326" y="427" text-anchor="end">date</text>
+  <line class="sep" x1="50" x2="330" y1="434" y2="434"/>
+  <text class="f" x="90" y="450">time</text>
+  <text class="t" x="326" y="450" text-anchor="end">time</text>
+  <line class="sep" x1="50" x2="330" y1="457" y2="457"/>
+  <text class="tag tag-fk" x="54" y="473">FK</text>
+  <text class="f" x="90" y="473">doctorId</text>
+  <text class="t" x="326" y="473" text-anchor="end">→ DOCTOR</text>
+  <line class="sep" x1="50" x2="330" y1="480" y2="480"/>
+  <text class="tag tag-fk" x="54" y="496">FK</text>
+  <text class="f" x="90" y="496">patientId</text>
+  <text class="t" x="326" y="496" text-anchor="end">→ PATIENT</text>
+  <line class="sep" x1="50" x2="330" y1="503" y2="503"/>
+  <text class="f" x="90" y="519">place</text>
+  <text class="t" x="326" y="519" text-anchor="end">string</text>
+</g>
+<g>
+  <rect class="box" x="460" y="347" width="300" height="253" rx="6"/>
+  <path class="head" d="M460 353 a6 6 0 0 1 6 -6 h288 a6 6 0 0 1 6 6 v30 h-300 z"/>
+  <text class="ename" x="474" y="370">APPOINTMENT</text>
+  <text class="tag tag-pk" x="474" y="404">PK</text>
+  <text class="f add" x="510" y="404">id *</text>
+  <text class="t" x="746" y="404" text-anchor="end">int</text>
+  <line class="sep" x1="470" x2="750" y1="411" y2="411"/>
+  <text class="f" x="510" y="427">serialNo</text>
+  <text class="t" x="746" y="427" text-anchor="end">int</text>
+  <line class="sep" x1="470" x2="750" y1="434" y2="434"/>
+  <text class="tag tag-fk" x="474" y="450">FK</text>
+  <text class="f" x="510" y="450">patientPhone</text>
+  <text class="t" x="746" y="450" text-anchor="end">→ PATIENT</text>
+  <line class="sep" x1="470" x2="750" y1="457" y2="457"/>
+  <text class="tag tag-fk" x="474" y="473">FK</text>
+  <text class="f" x="510" y="473">deviceId</text>
+  <text class="t" x="746" y="473" text-anchor="end">→ DEVICE</text>
+  <line class="sep" x1="470" x2="750" y1="480" y2="480"/>
+  <text class="f" x="510" y="496">patientName</text>
+  <text class="t" x="746" y="496" text-anchor="end">string</text>
+  <line class="sep" x1="470" x2="750" y1="503" y2="503"/>
+  <text class="f" x="510" y="519">age</text>
+  <text class="t" x="746" y="519" text-anchor="end">int</text>
+  <line class="sep" x1="470" x2="750" y1="526" y2="526"/>
+  <text class="f" x="510" y="542">doctorName</text>
+  <text class="t" x="746" y="542" text-anchor="end">string</text>
+  <line class="sep" x1="470" x2="750" y1="549" y2="549"/>
+  <text class="f" x="510" y="565">date</text>
+  <text class="t" x="746" y="565" text-anchor="end">date</text>
+  <line class="sep" x1="470" x2="750" y1="572" y2="572"/>
+  <text class="f" x="510" y="588">time</text>
+  <text class="t" x="746" y="588" text-anchor="end">time</text>
+</g>
+<g>
+  <rect class="box" x="880" y="347" width="300" height="230" rx="6"/>
+  <path class="head" d="M880 353 a6 6 0 0 1 6 -6 h288 a6 6 0 0 1 6 6 v30 h-300 z"/>
+  <text class="ename" x="894" y="370">DOCTOR</text>
+  <text class="tag tag-pk" x="894" y="404">PK</text>
+  <text class="f add" x="930" y="404">id *</text>
+  <text class="t" x="1166" y="404" text-anchor="end">int</text>
+  <line class="sep" x1="890" x2="1170" y1="411" y2="411"/>
+  <text class="tag tag-fk" x="894" y="427">FK</text>
+  <text class="f add" x="930" y="427">departmentId *</text>
+  <text class="t" x="1166" y="427" text-anchor="end">→ DEPARTMENT</text>
+  <line class="sep" x1="890" x2="1170" y1="434" y2="434"/>
+  <text class="f" x="930" y="450">name</text>
+  <text class="t" x="1166" y="450" text-anchor="end">string</text>
+  <line class="sep" x1="890" x2="1170" y1="457" y2="457"/>
+  <text class="f" x="930" y="473">designation</text>
+  <text class="t" x="1166" y="473" text-anchor="end">string</text>
+  <line class="sep" x1="890" x2="1170" y1="480" y2="480"/>
+  <text class="f" x="930" y="496">degree</text>
+  <text class="t" x="1166" y="496" text-anchor="end">string</text>
+  <line class="sep" x1="890" x2="1170" y1="503" y2="503"/>
+  <text class="f" x="930" y="519">workingChamber</text>
+  <text class="t" x="1166" y="519" text-anchor="end">string</text>
+  <line class="sep" x1="890" x2="1170" y1="526" y2="526"/>
+  <text class="f" x="930" y="542">scheduleTime</text>
+  <text class="t" x="1166" y="542" text-anchor="end">string</text>
+  <line class="sep" x1="890" x2="1170" y1="549" y2="549"/>
+  <text class="f" x="930" y="565">fee</text>
+  <text class="t" x="1166" y="565" text-anchor="end">money</text>
+</g>
+<g>
+  <rect class="box" x="880" y="700" width="300" height="138" rx="6"/>
+  <path class="head" d="M880 706 a6 6 0 0 1 6 -6 h288 a6 6 0 0 1 6 6 v30 h-300 z"/>
+  <text class="ename" x="894" y="723">DEPARTMENT</text>
+  <text class="tag tag-pk" x="894" y="757">PK</text>
+  <text class="f add" x="930" y="757">id *</text>
+  <text class="t" x="1166" y="757" text-anchor="end">int</text>
+  <line class="sep" x1="890" x2="1170" y1="764" y2="764"/>
+  <text class="f" x="930" y="780">departmentName</text>
+  <text class="t" x="1166" y="780" text-anchor="end">string</text>
+  <line class="sep" x1="890" x2="1170" y1="787" y2="787"/>
+  <text class="f" x="930" y="803">doctorNo</text>
+  <text class="t" x="1166" y="803" text-anchor="end">int</text>
+  <line class="sep" x1="890" x2="1170" y1="810" y2="810"/>
+  <text class="f" x="930" y="826">doctorDetails</text>
+  <text class="t" x="1166" y="826" text-anchor="end">text</text>
+</g>
+<line class="rel" x1="366" y1="99" x2="460" y2="99"/><line class="rel" x1="354" y1="99" x2="340" y2="90"/><line class="rel" x1="354" y1="99" x2="340" y2="108"/><line class="rel" x1="354" y1="99" x2="340" y2="99"/><circle class="ring" cx="361" cy="99" r="5"/><line class="rel" x1="450" y1="91" x2="450" y2="107"/><line class="rel" x1="444" y1="91" x2="444" y2="107"/><text class="rl" x="400" y="87" text-anchor="middle">has</text><text class="rs" x="400" y="123" text-anchor="middle">N : 1</text>
+<line class="rel" x1="760" y1="99" x2="880" y2="99"/><line class="rel" x1="770" y1="91" x2="770" y2="107"/><line class="rel" x1="776" y1="91" x2="776" y2="107"/><line class="rel" x1="870" y1="91" x2="870" y2="107"/><line class="rel" x1="864" y1="91" x2="864" y2="107"/><text class="rl" x="820" y="87" text-anchor="middle">is a</text><text class="rs" x="820" y="123" text-anchor="middle">1 : 1</text>
+<line class="rel" x1="1030" y1="155" x2="1030" y2="347"/><line class="rel" x1="1022" y1="165" x2="1038" y2="165"/><line class="rel" x1="1022" y1="171" x2="1038" y2="171"/><line class="rel" x1="1022" y1="337" x2="1038" y2="337"/><line class="rel" x1="1022" y1="331" x2="1038" y2="331"/><text class="rl" x="1050" y="249">is a</text><text class="rs" x="1050" y="266">1 : 1</text>
+<line class="rel" x1="1180" y1="99" x2="1274" y2="99"/><line class="rel" x1="1190" y1="91" x2="1190" y2="107"/><line class="rel" x1="1196" y1="91" x2="1196" y2="107"/><line class="rel" x1="1286" y1="99" x2="1300" y2="90"/><line class="rel" x1="1286" y1="99" x2="1300" y2="108"/><line class="rel" x1="1286" y1="99" x2="1300" y2="99"/><circle class="ring" cx="1279" cy="99" r="5"/><text class="rl" x="1240" y="87" text-anchor="middle">logs in on</text><text class="rs" x="1240" y="123" text-anchor="middle">1 : N</text>
+<line class="rel" x1="610" y1="247" x2="610" y2="321"/><line class="rel" x1="602" y1="257" x2="618" y2="257"/><line class="rel" x1="602" y1="263" x2="618" y2="263"/><line class="rel" x1="610" y1="333" x2="601" y2="347"/><line class="rel" x1="610" y1="333" x2="619" y2="347"/><line class="rel" x1="610" y1="333" x2="610" y2="347"/><circle class="ring" cx="610" cy="326" r="5"/><text class="rl" x="630" y="295">books</text><text class="rs" x="630" y="312">1 : N</text>
+<line class="rel" x1="340" y1="406" x2="434" y2="406"/><line class="rel" x1="350" y1="398" x2="350" y2="414"/><line class="rel" x1="356" y1="398" x2="356" y2="414"/><line class="rel" x1="446" y1="406" x2="460" y2="397"/><line class="rel" x1="446" y1="406" x2="460" y2="415"/><line class="rel" x1="446" y1="406" x2="460" y2="406"/><circle class="ring" cx="439" cy="406" r="5"/><text class="rl" x="400" y="394" text-anchor="middle">fills</text><text class="rs" x="400" y="430" text-anchor="middle">1 : N</text>
+<line class="rel" x1="786" y1="406" x2="880" y2="406"/><line class="rel" x1="774" y1="406" x2="760" y2="397"/><line class="rel" x1="774" y1="406" x2="760" y2="415"/><line class="rel" x1="774" y1="406" x2="760" y2="406"/><circle class="ring" cx="781" cy="406" r="5"/><line class="rel" x1="870" y1="398" x2="870" y2="414"/><line class="rel" x1="864" y1="398" x2="864" y2="414"/><text class="rl" x="820" y="394" text-anchor="middle">with</text><text class="rs" x="820" y="430" text-anchor="middle">N : 1</text>
+<line class="rel" x1="1030" y1="603" x2="1030" y2="700"/><line class="rel" x1="1030" y1="591" x2="1021" y2="577"/><line class="rel" x1="1030" y1="591" x2="1039" y2="577"/><line class="rel" x1="1030" y1="591" x2="1030" y2="577"/><circle class="ring" cx="1030" cy="598" r="5"/><line class="rel" x1="1022" y1="690" x2="1038" y2="690"/><line class="rel" x1="1022" y1="684" x2="1038" y2="684"/><text class="rl" x="1050" y="636.5">belongs to</text><text class="rs" x="1050" y="653.5">N : 1</text>
+
+      </svg>
+    </div>
+    <figcaption>
+      <span class="key"><svg viewBox="0 0 34 16"><line class="rel" x1="0" y1="8" x2="34" y2="8"/><line class="rel" x1="10" x2="10" y1="1" y2="15"/><line class="rel" x1="16" x2="16" y1="1" y2="15"/></svg> exactly one</span>
+      <span class="key"><svg viewBox="0 0 34 16"><line class="rel" x1="0" y1="8" x2="34" y2="8"/><circle class="ring" cx="12" cy="8" r="5"/><line class="rel" x1="20" y1="8" x2="34" y2="0"/><line class="rel" x1="20" y1="8" x2="34" y2="16"/></svg> zero or many</span>
+      <span class="key"><em>italic *</em> fields were added, not in the sketch</span>
+    </figcaption>
+  </figure>
+
+  <div class="notes">
+    <section>
+      <h2>Read from the sketch</h2>
+      <ul>
+        <li><b>User</b> is the shared login. A patient, a doctor or the registrar is each a kind of user, so both <b>is a</b> links are one-to-one.</li>
+        <li><b>Device</b> (new) records each phone a user signs in from: its name, platform, push token and last login. One user can have many devices.</li>
+        <li><b>Phone Number</b> is its own table with a <code>patientId</code>, so one patient can keep several numbers.</li>
+        <li><b>Schedule</b> holds the time, date and place. Its <code>doctorId</code> and <code>patientId</code> point to Doctor and Patient.</li>
+        <li><b>Appointment</b> keeps the serial number, the login phone (<code>patientPhone</code>) and the device it was booked from (<code>deviceId</code>), plus name, age, doctor name, date and time. My Appointments lists bookings by phone number.</li>
+      </ul>
+    </section>
+    <section>
+      <h2>What I added or guessed</h2>
+      <ul>
+        <li>Fields marked <code>*</code> were not in the sketch: an <code>id</code> on Schedule, Appointment, Doctor and Department, and <code>departmentId</code> on Doctor so the department link has a key.</li>
+        <li>I read the fifth field in Patient as <code>doctorId</code>. Check it against your notes.</li>
+        <li>The sketch's arrows don't show cardinality, so the 1 and N on each link are my reading of how the system works.</li>
+      </ul>
+    </section>
+  </div>
+</div>
+
+</body>
+</html>

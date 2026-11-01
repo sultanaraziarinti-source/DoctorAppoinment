@@ -1,0 +1,32 @@
+{
+  "expo": {
+    "name": "DoctorAppoinment",
+    "slug": "doctor-appointment-main",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.doctorappoinment.app"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "171c3b0c-8aa1-46b8-9f92-1f60c4c6a8f5"
+      }
+    },
+    "owner": "sultanaraziarinti",
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "color": "#0E747F"
+        }
+      ]
+    ]
+  }
+}
