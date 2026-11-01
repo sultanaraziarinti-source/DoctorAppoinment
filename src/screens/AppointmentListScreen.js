@@ -54,7 +54,6 @@ export default function AppointmentListScreen({
 
   // Filters for Step 2: Patient Serials
   const [patientSearchQuery, setPatientSearchQuery] = useState('');
-  const [filterStatus, setFilterStatus] = useState('all');
 
   // Android Hardware / Phone Back Button Handler
   useEffect(() => {
@@ -232,12 +231,9 @@ export default function AppointmentListScreen({
     });
   }, [appointments, selectedDoctor]);
 
-  // Filtered appointments for Step 2 by status and search query
+  // Filtered appointments for Step 2 by search query
   const filteredAppointments = useMemo(() => {
     return doctorAppointments.filter((apt) => {
-      if (filterStatus !== 'all' && apt.status !== filterStatus) {
-        return false;
-      }
       const q = patientSearchQuery.trim().toLowerCase();
       if (!q) return true;
       return (
@@ -247,7 +243,7 @@ export default function AppointmentListScreen({
         (apt.reason && apt.reason.toLowerCase().includes(q))
       );
     });
-  }, [doctorAppointments, filterStatus, patientSearchQuery]);
+  }, [doctorAppointments, patientSearchQuery]);
 
   const handleStatusChange = async (aptId, newStatus) => {
     const updated = await updateAppointmentStatus(aptId, newStatus);
@@ -388,54 +384,30 @@ export default function AppointmentListScreen({
               ) : null}
             </View>
 
-            <View style={styles.statusFiltersRow}>
-              {[
-                { id: 'all', bn: 'সকল অবস্থা', en: 'All' },
-                { id: 'confirmed', bn: 'নিশ্চিত', en: 'Confirmed' },
-                { id: 'completed', bn: 'সম্পন্ন', en: 'Completed' },
-                { id: 'cancelled', bn: 'বাতিল', en: 'Cancelled' },
-              ].map((st) => {
-                const isActive = filterStatus === st.id;
-                return (
-                  <TouchableOpacity
-                    key={st.id}
-                    style={[styles.statusChip, isActive && styles.statusChipActive]}
-                    onPress={() => setFilterStatus(st.id)}
-                  >
-                    <Text
-                      style={[
-                        styles.statusChipText,
-                        isActive && styles.statusChipTextActive,
-                      ]}
-                    >
-                      {isBn ? st.bn : st.en}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              })}
-            </View>
           </View>
 
           {/* Serials List */}
           <View style={styles.listContainer}>
-            <View style={styles.listHeaderRow}>
+            {/* Queue header: teal card so the doctor's queue stands out */}
+            <View style={styles.queueHeaderCard}>
+              <View style={styles.queueHeaderIcon}>
+                <Text style={styles.queueHeaderIconText}>📋</Text>
+              </View>
               <View style={styles.listHeaderTitleCol}>
-                <Text style={styles.listTitle}>
+                <Text style={styles.queueHeaderTitle}>
                   {isBn
-                    ? `${selectedDoctor.nameBn}-এর সিরিয়াল তালিকা`
+                    ? `${selectedDoctor.nameBn}-এর সিরিয়াল তালিকা`
                     : `Queue for ${selectedDoctor.nameEn}`}
                 </Text>
-                <Text style={styles.listSubTitle}>
+                <Text style={styles.queueHeaderSub}>
                   {isBn
-                    ? 'সিরিয়াল ক্রম অনুযায়ী রোগীদের উপস্থিতির তথ্য'
+                    ? 'সিরিয়াল ক্রম অনুযায়ী রোগীদের উপস্থিতির তথ্য'
                     : 'Patient queue ordered by serial number'}
                 </Text>
               </View>
-
-              <View style={styles.badgePill}>
-                <Text style={styles.badgePillText}>
-                  {filteredAppointments.length} {isBn ? 'টি সিরিয়াল' : 'Serials'}
-                </Text>
+              <View style={styles.queueCountBadge}>
+                <Text style={styles.queueCountNumber}>{filteredAppointments.length}</Text>
+                <Text style={styles.queueCountLabel}>{isBn ? 'সিরিয়াল' : 'Serials'}</Text>
               </View>
             </View>
 
@@ -542,18 +514,6 @@ export default function AppointmentListScreen({
 
                   {/* Action Buttons */}
                   <View style={styles.cardActionsRow}>
-                    {apt.status === 'confirmed' && (
-                      <TouchableOpacity
-                        style={styles.btnComplete}
-                        onPress={() => handleStatusChange(apt.id, 'completed')}
-                        activeOpacity={0.8}
-                      >
-                        <Text style={styles.btnCompleteText}>
-                          ✓ {isBn ? 'সম্পন্ন চিহ্নিত করুন' : 'Mark Completed'}
-                        </Text>
-                      </TouchableOpacity>
-                    )}
-
                     {apt.status !== 'cancelled' && (
                       <TouchableOpacity
                         style={styles.btnCancel}
@@ -1210,6 +1170,62 @@ const styles = StyleSheet.create({
   listContainer: {
     padding: 14,
     paddingBottom: 40,
+  },
+  queueHeaderCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#0E747F',
+    borderRadius: 18,
+    padding: 14,
+    marginBottom: 14,
+    gap: 12,
+    elevation: 6,
+    shadowColor: '#0E747F',
+    shadowOpacity: 0.35,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 4 },
+  },
+  queueHeaderIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: 'rgba(255, 255, 255, 0.18)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  queueHeaderIconText: {
+    fontSize: 22,
+  },
+  queueHeaderTitle: {
+    fontSize: 16,
+    fontWeight: '900',
+    color: '#FFFFFF',
+    lineHeight: 22,
+  },
+  queueHeaderSub: {
+    fontSize: 11.5,
+    color: '#CCFBF1',
+    fontWeight: '600',
+    marginTop: 3,
+  },
+  queueCountBadge: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 14,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    alignItems: 'center',
+    minWidth: 64,
+  },
+  queueCountNumber: {
+    fontSize: 20,
+    fontWeight: '900',
+    color: '#0E747F',
+    lineHeight: 24,
+  },
+  queueCountLabel: {
+    fontSize: 10.5,
+    fontWeight: '800',
+    color: '#0E747F',
   },
   listHeaderRow: {
     flexDirection: 'row',

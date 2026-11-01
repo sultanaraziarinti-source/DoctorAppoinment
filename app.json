@@ -2,7 +2,7 @@
   "expo": {
     "name": "DoctorAppoinment",
     "slug": "doctor-appointment-main",
-    "version": "1.0.0",
+    "version": "1.0.5",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
     "ios": {
@@ -10,9 +10,11 @@
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#E6F5F6"
       },
-      "package": "com.doctorappoinment.app"
+      "package": "com.doctorappoinment.app",
+      "versionCode": 6
     },
     "extra": {
       "eas": {
@@ -27,6 +29,10 @@
           "color": "#0E747F"
         }
       ]
-    ]
+    ],
+    "icon": "./assets/icon.png",
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
   }
 }

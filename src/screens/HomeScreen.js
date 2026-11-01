@@ -12,6 +12,7 @@ import {
   Modal,
   BackHandler,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Colors } from '../theme/colors';
 import LanguageSwitcher from '../components/LanguageSwitcher';
 import LogoutIcon from '../components/LogoutIcon';
@@ -49,6 +50,8 @@ export default function HomeScreen({
 }) {
   const t = translations[lang]?.home || translations.bn.home;
   const isBn = lang === 'bn';
+  // Only the part of the status bar that actually covers the screen (none in Expo Go, all of it in the APK)
+  const insets = useSafeAreaInsets();
   const allDepts = departments && departments.length > 0 ? departments : departmentsData;
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -484,7 +487,7 @@ export default function HomeScreen({
           style={styles.bannerBackground}
           resizeMode="cover"
         >
-          <View style={styles.bannerWhiteWash}>
+          <View style={[styles.bannerWhiteWash, { paddingTop: insets.top + 8 }]}>
             {/* Top Navigation Row */}
             <View style={styles.topNavRow}>
               {/* Same width as the bell, so the language switch sits in the exact middle */}
@@ -1228,7 +1231,6 @@ const styles = StyleSheet.create({
   },
   bannerWhiteWash: {
     backgroundColor: 'rgba(255, 255, 255, 0.90)', // Soft white doodle pattern wash
-    paddingTop: StatusBar.currentHeight ? StatusBar.currentHeight + 8 : 16,
     paddingHorizontal: 18,
     paddingBottom: 16,
   },
